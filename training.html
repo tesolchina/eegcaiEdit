@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Revision Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb', // Better contrast blue
+                        'primary-hover': '#1d4ed8',
+                        'primary-light': '#dbeafe',
+                        'success': '#059669',
+                        'warning': '#d97706',
+                        'info': '#0369a1'
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .task-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* High contrast focus styles */
+        .focus-outline:focus {
+            outline: 3px solid #2563eb;
+            outline-offset: 2px;
+        }
+        /* Improved contrast for text */
+        .high-contrast-text {
+            color: #1f2937; /* gray-800 */
+        }
+        .dark .high-contrast-text {
+            color: #f9fafb; /* gray-50 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header with improved contrast -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary mb-3 high-contrast-text">Essay Revision Training</h1>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Learn to use AI for focused essay revision</p>
+            
+            <!-- Gamification Dashboard with better contrast -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/40 dark:to-indigo-900/40 rounded-xl p-6 max-w-4xl mx-auto border-2 border-blue-200 dark:border-blue-800 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-700 dark:text-blue-300" id="total-points">0</div>
+                            <div class="text-sm font-medium text-blue-600 dark:text-blue-400">Points</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-indigo-700 dark:text-indigo-300" id="badges-earned">0/4</div>
+                            <div class="text-sm font-medium text-indigo-600 dark:text-indigo-400">Badges</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-700 dark:text-green-300" id="accuracy-score">0%</div>
+                            <div class="text-sm font-medium text-green-600 dark:text-green-400">Accuracy</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3" id="badge-display">
+                        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-500 border-2 border-gray-400 dark:border-gray-600" id="badge-1" title="Thesis Detective">🔍</div>
+                        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-500 border-2 border-gray-400 dark:border-gray-600" id="badge-2" title="Question Master">❓</div>
+                        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-500 border-2 border-gray-400 dark:border-gray-600" id="badge-3" title="Point Finder">🎯</div>
+                        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-500 border-2 border-gray-400 dark:border-gray-600" id="badge-4" title="Structure Master">🏗️</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Task Progress with better visual hierarchy -->
+        <section class="bg-white dark:bg-gray-800 rounded-xl p-5 mb-8 border-2 border-gray-300 dark:border-gray-600 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold high-contrast-text">Essay Structure Revision Tasks</h2>
+                <div class="text-base font-medium text-gray-700 dark:text-gray-300 bg-primary-light dark:bg-blue-900/30 px-3 py-1 rounded-full">
+                    <span id="current-task">Task 1</span> of 4
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <div id="task-1-indicator" class="flex-1 h-3 bg-primary rounded-full">
+                    <div class="text-sm font-medium text-center mt-3 text-primary high-contrast-text">Identify Thesis</div>
+                </div>
+                <div id="task-2-indicator" class="flex-1 h-3 bg-gray-300 dark:bg-gray-600 rounded-full">
+                    <div class="text-sm text-center mt-3 text-gray-600 dark:text-gray-400">Assess Thesis</div>
+                </div>
+                <div id="task-3-indicator" class="flex-1 h-3 bg-gray-300 dark:bg-gray-600 rounded-full">
+                    <div class="text-sm text-center mt-3 text-gray-600 dark:text-gray-400">Specific Points</div>
+                </div>
+                <div id="task-4-indicator" class="flex-1 h-3 bg-gray-300 dark:bg-gray-600 rounded-full">
+                    <div class="text-sm text-center mt-3 text-gray-600 dark:text-gray-400">Topic Sentences</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Essay Question and Framework with improved cards -->
+        <section class="grid md:grid-cols-3 gap-5 mb-8">
+            <div class="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-5 border-2 border-blue-200 dark:border-blue-800 shadow-sm">
+                <h3 class="font-bold text-base mb-3 text-blue-800 dark:text-blue-200 flex items-center gap-2">
+                    <span class="bg-blue-100 dark:bg-blue-800 p-1 rounded">📝</span>
+                    Essay Question:
+                </h3>
+                <p class="text-base text-blue-900 dark:text-blue-100 leading-relaxed">Some people believe that individual actions are insignificant in the fight against climate change compared to the efforts of governments and large corporations. To what extent do you agree or disagree with this statement?</p>
+            </div>
+            <div class="bg-green-50 dark:bg-green-900/30 rounded-xl p-5 border-2 border-green-200 dark:border-green-800 shadow-sm">
+                <h3 class="font-bold text-base mb-3 text-green-800 dark:text-green-200 flex items-center gap-2">
+                    <span class="bg-green-100 dark:bg-green-800 p-1 rounded">🏗️</span>
+                    Essay Framework:
+                </h3>
+                <ul class="text-base text-green-900 dark:text-green-100 space-y-2">
+                    <li class="flex items-center gap-2"><span class="text-success">✓</span> Thesis has 2-3 specific main points</li>
+                    <li class="flex items-center gap-2"><span class="text-success">✓</span> Each body paragraph develops ONE point</li>
+                    <li class="flex items-center gap-2"><span class="text-success">✓</span> Topic sentences connect to thesis points</li>
+                </ul>
+            </div>
+            <div class="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-5 border-2 border-purple-200 dark:border-purple-800 shadow-sm">
+                <h3 class="font-bold text-base mb-3 text-purple-800 dark:text-purple-200 flex items-center gap-2">
+                    <span class="bg-purple-100 dark:bg-purple-800 p-1 rounded">📚</span>
+                    Example Structure:
+                </h3>
+                <div class="text-sm text-purple-900 dark:text-purple-100 space-y-2">
+                    <p><strong class="text-purple-800 dark:text-purple-300">Thesis:</strong> "Three passions have governed my life: love, knowledge, and pity."</p>
+                    <p><strong class="text-purple-800 dark:text-purple-300">Body 1:</strong> "I have sought love, first..."</p>
+                    <p><strong class="text-purple-800 dark:text-purple-300">Body 2:</strong> "With equal passion I have sought knowledge..."</p>
+                    <p><strong class="text-purple-800 dark:text-purple-300">Body 3:</strong> "But always pity brought me back..."</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Left Panel: Task-Based Interface -->
+            <div class="space-y-6">
+                <!-- Task 1: Identify Thesis Statement -->
+                <div id="task-1" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-primary shadow-md">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">1</div>
+                        <h3 class="text-xl font-bold high-contrast-text">First, let's find the thesis statement</h3>
+                    </div>
+                    
+                    <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-4 mb-5 border-2 border-yellow-200 dark:border-yellow-800">
+                        <p class="text-base text-yellow-900 dark:text-yellow-100 flex items-start gap-2">
+                            <span class="text-yellow-600 dark:text-yellow-400 text-lg">💡</span>
+                            <span><strong>Hint:</strong> The thesis statement is usually the last sentence of the introduction paragraph. It should answer the essay question directly.</span>
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 text-base leading-relaxed">
+                        <div class="p-4 rounded-lg border-2 border-dashed border-gray-400 dark:border-gray-500 bg-gray-50 dark:bg-gray-700">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">Introduction Paragraph</span>
+                            <p class="mt-3 high-contrast-text">Climate change, it is very huge problem now. I think individual actions not so important like what government and big companies do. But still, I kinda disagree because people also can do stuff to help. <span class="bg-yellow-200 dark:bg-yellow-800 px-2 py-1 rounded border border-yellow-400 cursor-pointer font-medium" id="thesis-highlight">I will explain my thoughts here.</span></p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex gap-4">
+                        <button id="identify-thesis-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            🤖 Ask AI: Is this the thesis statement?
+                        </button>
+                        <button id="next-task-1-btn" class="bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md" disabled>
+                            Continue to Task 2 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task 2: Assess Thesis -->
+                <div id="task-2" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-primary shadow-md hidden">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">2</div>
+                        <h3 class="text-xl font-bold high-contrast-text">Assess thesis: Does it answer the question?</h3>
+                    </div>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 mb-5 border-2 border-blue-200 dark:border-blue-800">
+                        <p class="text-base text-blue-900 dark:text-blue-100 flex items-start gap-2">
+                            <span class="text-blue-600 dark:text-blue-400 text-lg">📝</span>
+                            <span><strong>Assessment:</strong> A good thesis directly answers the essay question with a clear position. Does yours take a stance on individual vs. government/corporate climate action?</span>
+                        </p>
+                    </div>
+
+                    <div id="thesis-display" class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg mb-5 border border-gray-300 dark:border-gray-600">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Current Thesis:</span>
+                        <p class="mt-2 font-medium high-contrast-text text-lg">I will explain my thoughts here.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="check-answer-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            🤖 Assess: Does it answer the question?
+                        </button>
+                        <button id="next-task-2-btn" class="bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md" disabled>
+                            Continue to Task 3 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task 3: Check for Specific Points -->
+                <div id="task-3" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-primary shadow-md hidden">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">3</div>
+                        <h3 class="text-xl font-bold high-contrast-text">Check if thesis contains specific points</h3>
+                    </div>
+                    
+                    <div class="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 mb-5 border-2 border-green-200 dark:border-green-800">
+                        <p class="text-base text-green-900 dark:text-green-100 flex items-start gap-2">
+                            <span class="text-green-600 dark:text-green-400 text-lg">🎯</span>
+                            <span><strong>Framework:</strong> Your thesis should contain 2-3 specific points that will be developed in your body paragraphs. Each point should be clear and distinct.</span>
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="check-points-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            🤖 Check: Contains specific points?
+                        </button>
+                        <button id="next-task-3-btn" class="bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md" disabled>
+                            Continue to Task 4 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Task 4: Topic Sentences Develop Points -->
+                <div id="task-4" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-primary shadow-md hidden">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">4</div>
+                        <h3 class="text-xl font-bold high-contrast-text">Do topic sentences develop the thesis points?</h3>
+                    </div>
+                    
+                    <div class="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 mb-5 border-2 border-orange-200 dark:border-orange-800">
+                        <p class="text-base text-orange-900 dark:text-orange-100 flex items-start gap-2">
+                            <span class="text-orange-600 dark:text-orange-400 text-lg">🔗</span>
+                            <span><strong>Development:</strong> Each topic sentence should pick up one specific point from your thesis and develop it further with evidence, examples, or detailed explanation.</span>
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 text-base">
+                        <div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Body Paragraph 1 Topic Sentence:</span>
+                            <p class="mt-2 high-contrast-text">"First, governments and companies, they got more power."</p>
+                        </div>
+                        <div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Body Paragraph 2 Topic Sentence:</span>
+                            <p class="mt-2 high-contrast-text">"But individual actions, they matter too, I guess."</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <button id="check-topic-sentences-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            🤖 Check Topic Development
+                        </button>
+                        <button id="revise-essay-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            ✏️ Revise Complete Essay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: AI Chat and Revision -->
+            <div class="space-y-6">
+                <!-- AI Chat Panel with improved contrast -->
+                <div id="ai-chat-container" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-gray-300 dark:border-gray-600 shadow-md">
+                    <h3 class="text-xl font-bold mb-5 flex items-center gap-3 high-contrast-text">
+                        <span class="bg-blue-100 dark:bg-blue-900 p-2 rounded-lg">🤖</span>
+                        AI Assistant
+                        <span id="task-context" class="text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1.5 rounded-full font-medium">Ready to help</span>
+                    </h3>
+                    
+                    <div id="chat-messages" class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-5 h-80 overflow-y-auto border border-gray-300 dark:border-gray-600">
+                        <div class="text-center text-gray-600 dark:text-gray-400 text-base py-12">
+                            Click a task button to get AI assistance with your thesis statement revision.
+                        </div>
+                    </div>
+                    
+                    <div id="loading-state" class="hidden text-center py-6">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        <p class="mt-3 text-gray-700 dark:text-gray-300 text-base font-medium">AI is thinking...</p>
+                    </div>
+                </div>
+
+                <!-- Revision Area with improved contrast -->
+                <div id="revision-container" class="bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-gray-300 dark:border-gray-600 shadow-md">
+                    <h3 class="text-xl font-bold mb-5 high-contrast-text">Thesis Statement Revision</h3>
+                    
+                    <div id="original-thesis" class="mb-5 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                        <h4 class="text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Original Thesis:</h4>
+                        <p class="text-base high-contrast-text">I will explain my thoughts here.</p>
+                    </div>
+                    
+                    <div class="mb-5">
+                        <label for="revised-thesis" class="block text-base font-semibold mb-3 high-contrast-text">Your Revised Thesis:</label>
+                        <textarea id="revised-thesis" rows="4" placeholder="Write your improved thesis statement here..." class="w-full p-4 text-base border-2 border-gray-400 dark:border-gray-500 rounded-lg bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-primary resize-vertical focus-outline high-contrast-text"></textarea>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button id="test-thesis-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            🤖 Test My Revision
+                        </button>
+                        <button id="submit-final-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                            ✓ Submit Final
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal with improved contrast -->
+        <div id="success-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl max-w-md w-full mx-4 border-2 border-green-300 dark:border-green-700">
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900 mb-5">
+                        <svg class="h-8 w-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">Revision Submitted!</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg">Your revision has been successfully submitted for review.</p>
+                    <button id="close-modal-btn" class="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                        Continue Revising
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode setup
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Essay paragraphs data
+        const essayParagraphs = {
+            1: "Climate change, it is very huge problem now. I think individual actions not so important like what government and big companies do. But still, I kinda disagree because people also can do stuff to help. I will explain my thoughts here.",
+            2: "First, governments and companies, they got more power. They can do big things. Like, government make laws for no pollution. They can stop plastic bags or tell factories to not make so much smoke. Companies also can change their ways. They can use less energy or make stuff that don't hurt environment. This is good because it change many people life at once. So powerful, you know.",
+            3: "But individual actions, they matter too, I guess. If many people do little things, it add up. Like, turn off lights at home save energy. Or buy things from green companies. Then companies think, oh, we must be green to sell more. But sometimes it hard to know if this really work. People don't always do it. Also, one person doing something. It not enough.",
+            4: "Another thing. When people change their life, like stop using car and walk, government see this. Politicians want votes, so they make rules people like. So individual action can push government to do more. Maybe start big movement. But I not sure how many people need to do this for it to work. Just thinking.",
+            5: "Some say individual action too small. One person cannot fix climate change. True, but if million people try, maybe it help. Every small thing count. Or not? I don't know sometimes. Anyway, I think both individual and government and companies must work. Individual action seem small but if many do it, it big. We need all to fix this problem. Climate change very bad, so everyone must try hard. That's my opinion."
+        };
+
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const taskContext = document.getElementById('task-context');
+        const loadingState = document.getElementById('loading-state');
+        const revisedThesis = document.getElementById('revised-thesis');
+        const successModal = document.getElementById('success-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        
+        // Task elements
+        const identifyThesisBtn = document.getElementById('identify-thesis-btn');
+        const nextTask1Btn = document.getElementById('next-task-1-btn');
+        const checkAnswerBtn = document.getElementById('check-answer-btn');
+        const nextTask2Btn = document.getElementById('next-task-2-btn');
+        const checkPointsBtn = document.getElementById('check-points-btn');
+        const nextTask3Btn = document.getElementById('next-task-3-btn');
+        const checkTopicSentencesBtn = document.getElementById('check-topic-sentences-btn');
+        const reviseEssayBtn = document.getElementById('revise-essay-btn');
+        const testThesisBtn = document.getElementById('test-thesis-btn');
+        const submitFinalBtn = document.getElementById('submit-final-btn');
+
+        // Current task state and gamification
+        let currentTask = 1;
+        let gameState = {
+            points: 0,
+            badges: 0,
+            correctAnswers: 0,
+            totalAttempts: 0,
+            tasksCompleted: {
+                identifyThesis: false,
+                checkAnswer: false,
+                checkPoints: false,
+                topicSentences: false
+            }
+        };
+
+        // Gamification functions
+        function addPoints(points, reason) {
+            gameState.points += points;
+            document.getElementById('total-points').textContent = gameState.points;
+            showPointsAnimation(`+${points} points!`, reason);
+        }
+
+        function earnBadge(badgeNumber, title) {
+            const badge = document.getElementById(`badge-${badgeNumber}`);
+            badge.classList.remove('bg-gray-300', 'dark:bg-gray-700', 'text-gray-500', 'border-gray-400', 'dark:border-gray-600');
+            badge.classList.add('bg-yellow-400', 'text-yellow-900', 'border-yellow-500', 'animate-bounce');
+            
+            gameState.badges++;
+            document.getElementById('badges-earned').textContent = `${gameState.badges}/4`;
+            
+            setTimeout(() => {
+                badge.classList.remove('animate-bounce');
+            }, 1000);
+            
+            showBadgeAnimation(title);
+        }
+
+        function updateAccuracy() {
+            const accuracy = gameState.totalAttempts > 0 ? Math.round((gameState.correctAnswers / gameState.totalAttempts) * 100) : 0;
+            document.getElementById('accuracy-score').textContent = `${accuracy}%`;
+        }
+
+        function showPointsAnimation(text, reason) {
+            const animation = document.createElement('div');
+            animation.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-6 py-4 rounded-xl text-xl font-bold z-50 animate-pulse shadow-2xl';
+            animation.innerHTML = `
+                <div class="text-center">
+                    <div class="text-3xl mb-2">${text}</div>
+                    <div class="text-base opacity-90">${reason}</div>
+                </div>
+            `;
+            document.body.appendChild(animation);
+            
+            setTimeout(() => {
+                animation.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                animation.style.opacity = '0';
+                setTimeout(() => animation.remove(), 300);
+            }, 1500);
+        }
+
+        function showBadgeAnimation(title) {
+            const animation = document.createElement('div');
+            animation.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-yellow-900 px-8 py-6 rounded-xl text-2xl font-bold z-50 shadow-2xl';
+            animation.innerHTML = `
+                <div class="text-center">
+                    <div class="text-4xl mb-3">🏆</div>
+                    <div class="font-bold">Badge Earned!</div>
+                    <div class="text-lg mt-2 font-medium">${title}</div>
+                </div>
+            `;
+            document.body.appendChild(animation);
+            
+            setTimeout(() => {
+                animation.style.opacity = '0';
+                setTimeout(() => animation.remove(), 300);
+            }, 2000);
+        }
+
+        function makeThesisHighlightInteractive() {
+            const highlight = document.getElementById('thesis-highlight');
+            highlight.addEventListener('click', () => {
+                // Interactive thesis selection game
+                if (!gameState.tasksCompleted.identifyThesis) {
+                    highlight.classList.add('bg-green-200', 'dark:bg-green-800', 'border-green-400');
+                    highlight.classList.remove('bg-yellow-200', 'dark:bg-yellow-800', 'border-yellow-400');
+                    addPoints(10, 'Found the thesis!');
+                    gameState.correctAnswers++;
+                    gameState.totalAttempts++;
+                    updateAccuracy();
+                    
+                    // Enable the AI check button
+                    identifyThesisBtn.classList.add('animate-pulse');
+                    setTimeout(() => identifyThesisBtn.classList.remove('animate-pulse'), 3000);
+                }
+            });
+        }
+
+        // Register AI response handler
+        if (window.Poe) {
+            window.Poe.registerHandler("thesis-task", (result) => {
+                const msg = result.responses[0];
+                
+                if (msg.status === "error") {
+                    loadingState.classList.add('hidden');
+                    addChatMessage("AI", `Error: ${msg.statusText}`, "error");
+                } else if (msg.status === "incomplete") {
+                    // Update with partial content while streaming
+                    if (msg.content.trim()) {
+                        loadingState.classList.add('hidden');
+                        updateChatMessage(msg.content);
+                    }
+                } else if (msg.status === "complete") {
+                    loadingState.classList.add('hidden');
+                    updateChatMessage(msg.content);
+                }
+            });
+        }
+
+        // Chat functions
+        function addChatMessage(sender, content, type = "normal") {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-4 ${sender === 'AI' ? 'ai-message' : 'user-message'}`;
+            
+            const senderSpan = document.createElement('div');
+            senderSpan.className = 'text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2';
+            senderSpan.textContent = sender === 'AI' ? '🤖 AI Assistant' : '👤 You';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = `p-4 rounded-lg text-base ${
+                sender === 'AI' 
+                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 border border-blue-300 dark:border-blue-700' 
+                    : 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-500'
+            }`;
+            
+            if (type === "error") {
+                contentDiv.className = 'p-4 rounded-lg text-base bg-red-100 dark:bg-red-900 text-red-900 dark:text-red-100 border border-red-300 dark:border-red-700';
+            }
+            
+            contentDiv.innerHTML = marked.parse(content);
+            
+            messageDiv.appendChild(senderSpan);
+            messageDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Clear the placeholder
+            const placeholder = chatMessages.querySelector('.text-center');
+            if (placeholder) {
+                placeholder.remove();
+            }
+        }
+
+        function updateChatMessage(content) {
+            const lastMessage = chatMessages.querySelector('.ai-message:last-child .p-4');
+            if (lastMessage) {
+                lastMessage.innerHTML = marked.parse(content);
+            } else {
+                addChatMessage("AI", content);
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Task progression functions
+        function enableTask(taskNumber) {
+            const taskElement = document.getElementById(`task-${taskNumber}`);
+            taskElement.classList.remove('opacity-50');
+            taskElement.classList.add('border-primary');
+            taskElement.classList.remove('border-gray-200', 'dark:border-gray-600');
+            
+            const indicator = taskElement.querySelector('.w-10.h-10');
+            indicator.classList.remove('bg-gray-400');
+            indicator.classList.add('bg-primary');
+        }
+
+        function completeTask(taskNumber) {
+            const taskElement = document.getElementById(`task-${taskNumber}`);
+            const indicator = taskElement.querySelector('.w-10.h-10');
+            indicator.classList.remove('bg-primary');
+            indicator.classList.add('bg-green-600');
+            indicator.innerHTML = '✓';
+        }
+
+        // Task 1: Identify Thesis Statement
+        identifyThesisBtn.addEventListener('click', async () => {
+            addChatMessage("You", "Is this the thesis statement?");
+            taskContext.textContent = "Identifying thesis";
+            loadingState.classList.remove('hidden');
+
+            const prompt = `@Claude-Sonnet-4 Look at this introduction paragraph:
+
+"${essayParagraphs[1]}"
+
+Is "I will explain my thoughts here" the thesis statement? Answer YES/NO and explain in one sentence why or why not. Keep it brief.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "thesis-task",
+                    stream: true,
+                    openChat: false
+                });
+                
+                // Gamification rewards
+                addPoints(25, 'Asked AI to identify thesis!');
+                gameState.tasksCompleted.identifyThesis = true;
+                earnBadge(1, 'Thesis Detective');
+                
+                nextTask1Btn.disabled = false;
+                nextTask1Btn.classList.remove('opacity-50');
+            } catch (err) {
+                loadingState.classList.add('hidden');
+                addChatMessage("AI", `Error: ${err.message}`, "error");
+            }
+        });
+
+        // Task 1 to Task 2 transition
+        nextTask1Btn.addEventListener('click', () => {
+            completeTask(1);
+            // Hide task 1 and show task 2
+            document.getElementById('task-1').classList.add('hidden');
+            document.getElementById('task-2').classList.remove('hidden');
+            
+            document.getElementById('current-task').textContent = "Task 2";
+            document.getElementById('task-1-indicator').classList.remove('bg-primary');
+            document.getElementById('task-1-indicator').classList.add('bg-green-600');
+            document.getElementById('task-2-indicator').classList.remove('bg-gray-300', 'dark:bg-gray-600');
+            document.getElementById('task-2-indicator').classList.add('bg-primary');
+            
+            taskContext.textContent = "Task 2: Assess Thesis";
+        });
+
+        // Task 2: Check if thesis answers question
+        checkAnswerBtn.addEventListener('click', async () => {
+            addChatMessage("You", "Does my thesis directly answer the essay question?");
+            taskContext.textContent = "Checking answer";
+            loadingState.classList.remove('hidden');
+
+            const prompt = `@Claude-Sonnet-4 Check if this thesis statement answers the essay question:
+
+QUESTION: "Some people believe that individual actions are insignificant in the fight against climate change compared to the efforts of governments and large corporations. To what extent do you agree or disagree with this statement?"
+
+THESIS: "I will explain my thoughts here."
+
+**Does the thesis directly answer the question?**
+Answer: YES / NO / PARTIAL
+Explanation: (one sentence)
+
+Keep response brief.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "thesis-task",
+                    stream: true,
+                    openChat: false
+                });
+                
+                // Gamification rewards
+                addPoints(30, 'Checked question alignment!');
+                gameState.tasksCompleted.checkAnswer = true;
+                earnBadge(2, 'Question Master');
+                
+                nextTask2Btn.disabled = false;
+            } catch (err) {
+                loadingState.classList.add('hidden');
+                addChatMessage("AI", `Error: ${err.message}`, "error");
+            }
+        });
+
+        // Task 2 to Task 3 transition
+        nextTask2Btn.addEventListener('click', () => {
+            completeTask(2);
+            // Hide task 2 and show task 3
+            document.getElementById('task-2').classList.add('hidden');
+            document.getElementById('task-3').classList.remove('hidden');
+            
+            document.getElementById('current-task').textContent = "Task 3";
+            document.getElementById('task-2-indicator').classList.remove('bg-primary');
+            document.getElementById('task-2-indicator').classList.add('bg-green-600');
+            document.getElementById('task-3-indicator').classList.remove('bg-gray-300', 'dark:bg-gray-600');
+            document.getElementById('task-3-indicator').classList.add('bg-primary');
+            
+            taskContext.textContent = "Task 3: Specific Points";
+        });
+
+        // Task 3: Check for 2 main points
+        checkPointsBtn.addEventListener('click', async () => {
+            addChatMessage("You", "Does my thesis contain 2 specific main points?");
+            taskContext.textContent = "Checking main points";
+            loadingState.classList.remove('hidden');
+
+            const prompt = `@Claude-Sonnet-4 Check if this thesis contains 2 specific main points:
+
+THESIS: "I will explain my thoughts here."
+
+**Does the thesis contain 2 specific main points?**
+Answer: YES / NO / PARTIAL
+Explanation: (one sentence)
+
+Keep response brief.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "thesis-task",
+                    stream: true,
+                    openChat: false
+                });
+                
+                // Gamification rewards
+                addPoints(35, 'Checked for main points!');
+                gameState.tasksCompleted.checkPoints = true;
+                earnBadge(3, 'Point Finder');
+                
+                nextTask3Btn.disabled = false;
+            } catch (err) {
+                loadingState.classList.add('hidden');
+                addChatMessage("AI", `Error: ${err.message}`, "error");
+            }
+        });
+
+        // Task 3 to Task 4 transition
+        nextTask3Btn.addEventListener('click', () => {
+            completeTask(3);
+            // Hide task 3 and show task 4
+            document.getElementById('task-3').classList.add('hidden');
+            document.getElementById('task-4').classList.remove('hidden');
+            
+            document.getElementById('current-task').textContent = "Task 4";
+            document.getElementById('task-3-indicator').classList.remove('bg-primary');
+            document.getElementById('task-3-indicator').classList.add('bg-green-600');
+            document.getElementById('task-4-indicator').classList.remove('bg-gray-300', 'dark:bg-gray-600');
+            document.getElementById('task-4-indicator').classList.add('bg-primary');
+            
+            taskContext.textContent = "Task 4: Topic Sentences";
+        });
+
+        // Task 4: Check Topic Sentences
+        checkTopicSentencesBtn.addEventListener('click', async () => {
+            addChatMessage("You", "Do my topic sentences connect to my thesis points?");
+            taskContext.textContent = "Checking topic sentences";
+            loadingState.classList.remove('hidden');
+
+            const prompt = `@Claude-Sonnet-4 Check if these topic sentences connect to the thesis points. Use the Russell essay framework:
+
+THESIS: "I will explain my thoughts here."
+
+TOPIC SENTENCE 1: "First, governments and companies, they got more power."
+TOPIC SENTENCE 2: "But individual actions, they matter too, I guess."
+
+**Framework Example:** Russell's "Three passions have governed my life: love, knowledge, and pity."
+- Body 1: "I have sought love, first..." (develops the "love" point)
+- Body 2: "With equal passion I have sought knowledge..." (develops the "knowledge" point)
+
+**Do the topic sentences clearly connect to specific thesis points?**
+Answer: YES / NO / PARTIAL
+Explanation: (one sentence about the connection)
+
+Keep response brief and focused on the thesis-topic sentence framework.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "thesis-task",
+                    stream: true,
+                    openChat: false
+                });
+                
+                // Gamification rewards for final task
+                addPoints(40, 'Mastered essay structure!');
+                gameState.tasksCompleted.topicSentences = true;
+                earnBadge(4, 'Structure Master');
+            } catch (err) {
+                loadingState.classList.add('hidden');
+                addChatMessage("AI", `Error: ${err.message}`, "error");
+            }
+        });
+
+        // Complete Essay Revision
+        reviseEssayBtn.addEventListener('click', () => {
+            // Expand the revision area to include full essay editing
+            const revisionContainer = document.getElementById('revision-container');
+            revisionContainer.innerHTML = `
+                <h3 class="text-xl font-bold mb-5 high-contrast-text">Complete Essay Revision</h3>
+                
+                <div class="mb-5 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                    <h4 class="text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Revised Thesis Statement:</h4>
+                    <textarea id="final-thesis" rows="3" placeholder="Write your final thesis statement..." class="w-full p-3 text-base border-2 border-gray-400 dark:border-gray-500 rounded bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-primary focus-outline high-contrast-text">${revisedThesis.value}</textarea>
+                </div>
+                
+                <div class="mb-5 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600">
+                    <h4 class="text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Revised Topic Sentences:</h4>
+                    <div class="space-y-3">
+                        <input id="topic-1" type="text" placeholder="Body paragraph 1 topic sentence..." class="w-full p-3 text-base border-2 border-gray-400 dark:border-gray-500 rounded bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus-outline high-contrast-text" value="First, governments and companies, they got more power.">
+                        <input id="topic-2" type="text" placeholder="Body paragraph 2 topic sentence..." class="w-full p-3 text-base border-2 border-gray-400 dark:border-gray-500 rounded bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus-outline high-contrast-text" value="But individual actions, they matter too, I guess.">
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button id="test-complete-essay-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                        🤖 Test Complete Structure
+                    </button>
+                    <button id="submit-complete-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-lg transition-colors focus-outline shadow-md">
+                        ✓ Submit Final Essay
+                    </button>
+                </div>
+            `;
+
+            // Add event listeners for the new buttons
+            document.getElementById('test-complete-essay-btn').addEventListener('click', async () => {
+                const finalThesis = document.getElementById('final-thesis').value.trim();
+                const topic1 = document.getElementById('topic-1').value.trim();
+                const topic2 = document.getElementById('topic-2').value.trim();
+
+                if (!finalThesis || !topic1 || !topic2) {
+                    showCustomAlert('Please fill in all fields before testing.');
+                    return;
+                }
+
+                addChatMessage("You", "Test my complete essay structure");
+                taskContext.textContent = "Testing complete structure";
+                loadingState.classList.remove('hidden');
+
+                const prompt = `@Claude-Sonnet-4 Test this complete essay structure using the Russell framework:
+
+THESIS: "${finalThesis}"
+TOPIC SENTENCE 1: "${topic1}"
+TOPIC SENTENCE 2: "${topic2}"
+
+**Check the complete structure:**
+1. Does the thesis directly answer the question? (YES/NO/PARTIAL)
+2. Does the thesis contain 2 specific main points? (YES/NO/PARTIAL)
+3. Do the topic sentences clearly connect to the thesis points? (YES/NO/PARTIAL)
+
+Provide brief explanations for each. Use the Russell essay as a model for good structure.`;
+
+                try {
+                    await window.Poe.sendUserMessage(prompt, {
+                        handler: "thesis-task",
+                        stream: true,
+                        openChat: false
+                    });
+                } catch (err) {
+                    loadingState.classList.add('hidden');
+                    addChatMessage("AI", `Error: ${err.message}`, "error");
+                }
+            });
+
+            document.getElementById('submit-complete-btn').addEventListener('click', () => {
+                completeTask(4);
+                successModal.classList.remove('hidden');
+            });
+        });
+
+        // Test revised thesis
+        testThesisBtn.addEventListener('click', async () => {
+            const revisedText = revisedThesis.value.trim();
+            if (!revisedText) {
+                showCustomAlert('Please write a revised thesis statement first.');
+                return;
+            }
+
+            addChatMessage("You", `Test my revised thesis: "${revisedText}"`);
+            taskContext.textContent = "Testing revision";
+            loadingState.classList.remove('hidden');
+
+            const prompt = `@Claude-Sonnet-4 Test this revised thesis statement:
+
+QUESTION: "Some people believe that individual actions are insignificant in the fight against climate change compared to the efforts of governments and large corporations. To what extent do you agree or disagree with this statement?"
+
+REVISED THESIS: "${revisedText}"
+
+**1. Does the thesis directly answer the question?**
+Answer: YES / NO / PARTIAL
+Explanation: (one sentence)
+
+**2. Does the thesis contain 2 specific main points?**
+Answer: YES / NO / PARTIAL  
+Explanation: (one sentence)
+
+Keep response short and focused.`;
+
+            try {
+                await window.Poe.sendUserMessage(prompt, {
+                    handler: "thesis-task",
+                    stream: true,
+                    openChat: false
+                });
+            } catch (err) {
+                loadingState.classList.add('hidden');
+                addChatMessage("AI", `Error: ${err.message}`, "error");
+            }
+        });
+
+        // Submit final revision
+        submitFinalBtn.addEventListener('click', () => {
+            const revisedText = revisedThesis.value.trim();
+            if (revisedText) {
+                successModal.classList.remove('hidden');
+            } else {
+                showCustomAlert('Please write a revised thesis statement before submitting.');
+            }
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+
+        // Custom alert function
+        function showCustomAlert(message) {
+            const alertModal = document.createElement('div');
+            alertModal.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+            alertModal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl max-w-sm w-full mx-4 border-2 border-blue-300 dark:border-blue-700">
+                    <p class="text-gray-800 dark:text-gray-200 mb-5 text-lg text-center">${message}</p>
+                    <button class="w-full px-5 py-3 bg-primary text-white hover:bg-primary-hover rounded-lg transition-colors font-semibold focus-outline" onclick="this.closest('.fixed').remove()">OK</button>
+                </div>
+            `;
+            document.body.appendChild(alertModal);
+        }
+
+        // Initialize gamification
+        makeThesisHighlightInteractive();
+        console.log('Essay Revision Training loaded successfully');
+    </script>
+</body>
+</html>
