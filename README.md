@@ -80,6 +80,19 @@ Vue.js frontend application:
 - **Branch**: main
 - **Status**: All files organized and ready for development
 
+## Implementation Notes
+- **AI Tutor Backend**: See `KAI_TAI_IMPLEMENTATION_NOTES.md` for comprehensive implementation guidance
+- **Four Learning Goals**: Context provision, goal negotiation, critical review, independent work
+- **Assessment Framework**: Dual assessment (essay quality + AI communication skills)
+- **Technical Requirements**: Multi-turn conversations, rubric scoring, progress tracking
+
+## Key Implementation Files
+- `KAI_TAI_IMPLEMENTATION_NOTES.md` - Complete backend implementation guide
+- `docs/design/mockup_split/index.html` - Unified training interface
+- `reference/four-goals-of-learning-ai.md` - Learning goals framework
+- `reference/AI-communication-rubrics.md` - Assessment criteria
+- `reference/sampleEssay2edit.md` - Practice essay with specific issues
+
 ---
 
 *This project supports the development of AI literacy skills in academic writing contexts, following HKBU's LANG 0036 curriculum requirements.*
