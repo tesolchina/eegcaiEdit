@@ -1,5 +1,5 @@
 # Designing AI interaction for thesis guidance
-_Exported on 18/10/2025 at 23:24:49 GMT+8 from Cursor (1.7.52)_
+_Exported on 19/10/2025 at 5:16:30 GMT+8 from Cursor (1.7.52)_
 
 ---
 
@@ -19,7 +19,7 @@ then students should be given an example of raising quesitons and critically rev
 the interaction should be more carefully designed to achieve goal no. 3 /Users/simonwang/Documents/Usage/EEGC_aiedit/reference/four-goals-of-learning-ai.md
 
 set up openrouter API access to LLM using the key here
-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
+YOUR_OPENROUTER_API_KEY_HERE
 keep it in an .env file - do not push to github 
 
 use this to support UI and allow users to talk to AI 
@@ -531,7 +531,7 @@ Provide educational explanation. Keep response under 5 sentences.`);
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -934,7 +934,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -1346,7 +1346,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -1768,7 +1768,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -2190,7 +2190,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -2618,7 +2618,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -3046,7 +3046,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -3162,7 +3162,7 @@ This document explains how to set up and use the OpenRouter API integration for 
 ### 1. API Key Setup
 The OpenRouter API key is stored in the `.env` file:
 ```
-OPENROUTER_API_KEY=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
+OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY_HERE
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 ```
 
@@ -4065,7 +4065,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -4513,7 +4513,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -4979,7 +4979,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -5445,7 +5445,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -5974,7 +5974,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -6529,7 +6529,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -7085,7 +7085,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -7639,7 +7639,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -8203,7 +8203,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -8855,7 +8855,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -9421,7 +9421,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -9990,7 +9990,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -10560,7 +10560,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -11130,7 +11130,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 
@@ -11700,7 +11700,7 @@ Provide educational explanation that encourages further critical thinking. Ask f
         }
 
         // OpenRouter API Configuration
-        const OPENROUTER_API_KEY = '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';
+        const OPENROUTER_API_KEY = 'YOUR_OPENROUTER_API_KEY_HERE';
         const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
         const MODEL = 'anthropic/claude-3.5-sonnet';
 

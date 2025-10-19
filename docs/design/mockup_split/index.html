@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Essay Training Mode - Complete Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-hover': '#4a49c5',
+                        'primary-light': '#ebebfa',
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #5D5CDE;
+            color: white;
+        }
+        .tab-button:hover:not(.active) {
+            background-color: #ebebfa;
+        }
+        .sentence-highlight {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .sentence-highlight:hover {
+            background-color: rgba(93, 92, 222, 0.2);
+        }
+        .sentence-selected {
+            background-color: rgba(93, 92, 222, 0.3);
+            border-bottom: 2px solid #5D5CDE;
+            font-weight: 500;
+        }
+        .rubric-annotation {
+            cursor: pointer;
+            position: relative;
+        }
+        .rubric-annotation:hover {
+            background-color: rgba(251, 191, 36, 0.2);
+        }
+        .annotation-popup {
+            display: none;
+            position: absolute;
+            z-index: 10;
+            background: white;
+            border: 2px solid #5D5CDE;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-width: 250px;
+        }
+        .dark .annotation-popup {
+            background: #1f2937;
+            color: #f9fafb;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-[#181818] text-gray-900 dark:text-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-7xl">
+        <!-- Main Header -->
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">AI Essay Training Mode</h1>
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Complete workflow for developing AI collaboration skills in academic writing
+            </p>
+            
+            <!-- Four Learning Goals Overview -->
+            <div class="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800 max-w-4xl mx-auto">
+                <h3 class="text-xl font-bold text-blue-900 dark:text-blue-200 mb-4 text-center">🎯 Four Learning Goals for AI Collaboration</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div class="bg-red-100 dark:bg-red-900/30 rounded-lg p-3 text-center">
+                        <div class="font-bold text-red-800 dark:text-red-200 text-lg">Goal 1</div>
+                        <div class="text-red-700 dark:text-red-300 font-medium">Provide Context</div>
+                        <div class="text-red-600 dark:text-red-400 text-xs mt-1">Share relevant information</div>
+                    </div>
+                    <div class="bg-orange-100 dark:bg-orange-900/30 rounded-lg p-3 text-center">
+                        <div class="font-bold text-orange-800 dark:text-orange-200 text-lg">Goal 2</div>
+                        <div class="text-orange-700 dark:text-orange-300 font-medium">Negotiate Goals</div>
+                        <div class="text-orange-600 dark:text-orange-400 text-xs mt-1">Set priorities together</div>
+                    </div>
+                    <div class="bg-yellow-100 dark:bg-yellow-900/30 rounded-lg p-3 text-center">
+                        <div class="font-bold text-yellow-800 dark:text-yellow-200 text-lg">Goal 3</div>
+                        <div class="text-yellow-700 dark:text-yellow-300 font-medium">Critically Review</div>
+                        <div class="text-yellow-600 dark:text-yellow-400 text-xs mt-1">Question AI suggestions</div>
+                    </div>
+                    <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-3 text-center">
+                        <div class="font-bold text-green-800 dark:text-green-200 text-lg">Goal 4</div>
+                        <div class="text-green-700 dark:text-green-300 font-medium">Do Your Own Work</div>
+                        <div class="text-green-600 dark:text-green-400 text-xs mt-1">Maintain ownership</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="mb-8">
+            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="context" onclick="switchTab('context')">
+                    1. Context Confirmation
+                </button>
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="goals" onclick="switchTab('goals')">
+                    2. Goal Setting
+                </button>
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="thesis" onclick="switchTab('thesis')">
+                    3. Thesis Development
+                </button>
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="topics" onclick="switchTab('topics')">
+                    4. Topic Sentences
+                </button>
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="paragraph" onclick="switchTab('paragraph')">
+                    5. Body Paragraph
+                </button>
+                <button class="tab-button px-4 py-2 rounded-lg font-medium text-sm md:text-base" data-tab="reflection" onclick="switchTab('reflection')">
+                    6. Reflection
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content-container">
+            
+            <!-- Context Confirmation Tab -->
+            <div id="context" class="tab-content active">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Context Work (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Context Information -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl font-bold mb-4 text-primary">Context Information</h2>
+                            
+                            <div class="mb-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Essay Question:</p>
+                                <p class="text-sm">Some people believe that individual actions are insignificant in the fight against climate change compared to the efforts of governments and large corporations. To what extent do you agree or disagree with this statement?</p>
+                            </div>
+
+                            <div class="mb-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Sample Essay Context:</p>
+                                <p class="text-sm">You'll be working with a well-written sample essay that has specific issues to address: thesis clarity, topic sentence development, evidence specificity, critical analysis, counter-argument integration, and conclusion synthesis.</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                    Ask about contextual information
+                                </button>
+                                <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                    Confirm context understanding
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Learning Goals -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Learning Goals</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span class="text-sm">Understand the essay question</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span class="text-sm">Clarify your perspective</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span class="text-sm">Identify key concepts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goal Setting Tab -->
+            <div id="goals" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Goal Setting (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl font-bold mb-4 text-primary">Set Your Learning Goals</h2>
+                            
+                            <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <h3 class="text-sm font-bold text-blue-900 dark:text-blue-200 mb-2">🎯 Goal 2: Strategic Planning Progress</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                        <span class="text-gray-600 dark:text-gray-400">Set priorities</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                        <span class="text-gray-600 dark:text-gray-400">Negotiate goals</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                        <span class="text-gray-600 dark:text-gray-400">Plan approach</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                                        <span class="text-gray-600 dark:text-gray-400">Review progress</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">What do you want to focus on?</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="3" placeholder="Describe your learning goals..."></textarea>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Ask about goal setting
+                                    </button>
+                                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Negotiate with AI on goals
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Goal Examples -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Example Goals</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <strong>Focus:</strong> Improve argument structure
+                                </div>
+                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <strong>Focus:</strong> Strengthen evidence use
+                                </div>
+                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <strong>Focus:</strong> Enhance critical analysis
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thesis Development Tab -->
+            <div id="thesis" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Thesis Work (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl font-bold mb-4 text-primary">Thesis Statement Development</h2>
+                            
+                            <div class="mb-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Sample thesis (needs improvement):</p>
+                                <p class="text-sm">Individual actions, while important, are ultimately insufficient to address climate change without systemic change from governments and corporations.</p>
+                                <p class="text-xs text-orange-600 dark:text-orange-400 mt-1">Issue: Lacks clear position on "extent" of agreement/disagreement</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Revise your thesis:</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="3" placeholder="Enter your revised thesis statement..."></textarea>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Get thesis feedback
+                                    </button>
+                                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Ask critical questions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Thesis Guidelines -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Thesis Guidelines</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Clear position on the topic</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Specific and arguable</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Preview of main arguments</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic Sentences Tab -->
+            <div id="topics" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Topic Sentences (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl font-bold mb-4 text-primary">Topic Sentence Development</h2>
+                            
+                            <div class="mb-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Your thesis:</p>
+                                <p class="text-sm">Individual actions, while important, are ultimately insufficient to address climate change without systemic change from governments and corporations.</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Topic sentence 1:</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="2" placeholder="First supporting argument..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Topic sentence 2:</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="2" placeholder="Second supporting argument..."></textarea>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Assess topic sentences
+                                    </button>
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Get revision suggestions
+                                    </button>
+                                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Ask critical questions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Topic Sentence Tips -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Topic Sentence Tips</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Support your thesis directly</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Be specific and clear</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Preview paragraph content</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Paragraph Tab -->
+            <div id="paragraph" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Body Paragraph Work (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl font-bold mb-4 text-primary">Body Paragraph Development</h2>
+                            
+                            <div class="mb-4 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <p class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Your thesis:</p>
+                                <p class="text-sm">Individual actions, while important, are ultimately insufficient to address climate change without systemic change from governments and corporations.</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Body paragraph to improve:</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="6" placeholder="Paste your body paragraph here..."></textarea>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Identify paragraph issues
+                                    </button>
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Get revision suggestions
+                                    </button>
+                                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Ask critical questions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Paragraph Structure -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Paragraph Structure</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Topic sentence</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Supporting evidence</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Analysis and explanation</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                    <span>Concluding sentence</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reflection Tab -->
+            <div id="reflection" class="tab-content">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Left Panel: Reflection (2 columns) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h2 class="text-xl md:text-2xl font-bold mb-4 text-primary">Reflect on Your Learning Journey</h2>
+
+                            <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-500">
+                                <h3 class="font-bold text-green-900 dark:text-green-200 mb-2">Goal 4: Do Your Own Writing and Editing</h3>
+                                <p class="text-sm text-green-800 dark:text-green-300">Take ownership of your writing process and develop independent editing skills.</p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">What did you learn about AI collaboration?</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="4" placeholder="Reflect on your experience working with AI..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">How will you apply these skills in future writing?</label>
+                                    <textarea class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700" rows="4" placeholder="Think about how you'll use AI collaboration skills..."></textarea>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Get reflection feedback
+                                    </button>
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+                                        Ask follow-up questions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Learning Outcomes -->
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+                            <h3 class="text-lg font-bold mb-4 text-primary">Learning Outcomes</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <span>Enhanced AI collaboration skills</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <span>Improved writing process</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <span>Critical thinking development</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                    <span>Independent editing skills</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Assessment Rubrics Reference -->
+        <div class="mt-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-bold mb-4 text-primary">📋 Assessment Rubrics Reference</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Essay Quality Assessment</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Content & Ideas:</span>
+                            <span class="font-medium">1-5 scale</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Organisation & Logic:</span>
+                            <span class="font-medium">1-5 scale</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Vocabulary:</span>
+                            <span class="font-medium">1-5 scale</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Grammar & Structure:</span>
+                            <span class="font-medium">1-5 scale</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white mb-3">AI Communication Skills</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Context Provision:</span>
+                            <span class="font-medium">Goal 1</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Goal Negotiation:</span>
+                            <span class="font-medium">Goal 2</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Critical Review:</span>
+                            <span class="font-medium">Goal 3</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Independent Work:</span>
+                            <span class="font-medium">Goal 4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p class="text-sm text-blue-800 dark:text-blue-200">
+                    <strong>Note:</strong> You'll be assessed on both essay quality improvement AND your AI collaboration skills.
+                </p>
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="mt-8 bg-white dark:bg-gray-800 rounded-lg p-4 md:p-6 shadow-md">
+            <h3 class="text-lg font-bold mb-4 text-primary">Overall Progress</h3>
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">1</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Context</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">2</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Goals</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">3</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Thesis</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">4</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Topics</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">5</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Paragraph</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-8 h-8 bg-primary rounded-full mx-auto mb-2 flex items-center justify-center text-white text-sm font-bold">6</div>
+                    <span class="text-xs text-gray-600 dark:text-gray-400">Reflection</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+
+            // Add active class to clicked button
+            const clickedButton = document.querySelector(`[data-tab="${tabName}"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+        }
+
+        // Initialize first tab as active
+        document.addEventListener('DOMContentLoaded', function() {
+            switchTab('context');
+        });
+    </script>
+</body>
+</html>
