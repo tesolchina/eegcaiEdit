@@ -5,51 +5,57 @@ Some people believe that individual actions are insignificant in the fight again
 
 ## Student Essay (Original Version)
 
-**Individual Actions vs. Systemic Change: A Balanced Perspective on Climate Action**
+**Climate Change and Individual Actions**
 
-Climate change is one of the most pressing challenges of our time, and there is ongoing debate about whether individual actions or systemic changes by governments and corporations are more effective in addressing this crisis. While individual actions may seem small in comparison to large-scale policy changes, they play a crucial role in creating the social and political momentum necessary for systemic transformation.
+Climate change is a big problem that affects everyone. Some people think that individual actions are not important compared to what governments and companies do. I think that individual actions are important but they are not enough to solve climate change by themselves.
 
-Individual actions, while seemingly insignificant on their own, collectively create significant impact. When millions of people choose sustainable transportation, reduce energy consumption, or support environmentally conscious businesses, the cumulative effect can be substantial. For example, the growing demand for electric vehicles has pushed major automobile manufacturers to invest heavily in electric vehicle technology and infrastructure. This demonstrates how individual consumer choices can drive corporate behavior and market transformation.
+Individual actions can make a difference because when many people do the same thing, it adds up. For example, if people recycle more, it helps the environment. Also, when people buy electric cars, companies will make more of them. This shows that individual choices can influence what companies do.
 
-However, individual actions alone are insufficient to address the scale and urgency of climate change. The most significant sources of greenhouse gas emissions come from industrial processes, energy production, and transportation systems that require systemic changes beyond individual control. For instance, transitioning to renewable energy sources requires massive infrastructure investments and policy frameworks that only governments can implement. Similarly, regulating industrial emissions and setting carbon pricing mechanisms are actions that can only be taken at the governmental level.
+However, individual actions alone cannot solve climate change because the problem is too big. Most pollution comes from factories and power plants that individuals cannot control. Governments need to make laws to reduce emissions from these sources. Also, building renewable energy like solar panels costs a lot of money that only governments can provide.
 
-The relationship between individual actions and systemic change is not either-or but rather mutually reinforcing. Individual actions create the social and political pressure necessary for governments and corporations to implement systemic changes. The youth climate movement, led by figures like Greta Thunberg, demonstrates how individual activism can galvanize public opinion and pressure policymakers to take more ambitious climate action. Additionally, individual choices in consumption and lifestyle can influence corporate behavior and market dynamics, creating a feedback loop that accelerates systemic transformation.
+Individual actions and government actions work together to fight climate change. When people care about the environment, they vote for politicians who will make environmental laws. Also, when people change their behavior, it shows companies that there is demand for green products. This creates a cycle where individual actions lead to bigger changes.
 
-In conclusion, while individual actions may appear insignificant compared to large-scale systemic changes, they are essential components of a comprehensive approach to climate action. Individual actions create the social momentum, political pressure, and market signals necessary for governments and corporations to implement the systemic changes required to address climate change effectively. The most effective approach combines both individual responsibility and systemic transformation, recognizing that both are necessary and mutually reinforcing in the fight against climate change.
+In conclusion, individual actions are important but not enough by themselves. We need both individual actions and government actions to solve climate change. Everyone should do their part, but we also need strong policies to make real change happen.
 
 ---
 
 ## Specific Issues to Address
 
 ### 1. **Thesis Statement Issues**
-- **Current**: The thesis is somewhat clear but could be more specific about the extent of agreement/disagreement
-- **Issue**: Lacks a clear position on the "extent" of agreement/disagreement as required by the question
-- **Improvement needed**: More precise thesis that directly addresses the "to what extent" aspect
+- **Current**: "I think that individual actions are important but they are not enough to solve climate change by themselves"
+- **Issue**: Vague and doesn't directly address the "extent" question - doesn't clearly state to what extent individual actions are significant
+- **Improvement needed**: Clear position on the extent of agreement/disagreement with specific reasoning
 
-### 2. **Topic Sentence Development**
-- **Current**: Topic sentences are present but could be more argumentative
-- **Issue**: Some topic sentences are descriptive rather than analytical
-- **Improvement needed**: More analytical topic sentences that directly support the thesis
+### 2. **Topic Sentence Problems**
+- **Current**: Topic sentences are too general and don't clearly connect to thesis points
+- **Issue**: "Individual actions can make a difference" doesn't specify HOW or to what extent
+- **Improvement needed**: More specific topic sentences that directly support the thesis with clear arguments
 
-### 3. **Evidence and Examples**
-- **Current**: Good use of examples but could be more specific
-- **Issue**: Some examples are general rather than specific
-- **Improvement needed**: More concrete, specific examples with data or statistics
+### 3. **Weak Evidence and Examples**
+- **Current**: Very general examples like "if people recycle more, it helps the environment"
+- **Issue**: No specific data, statistics, or concrete evidence to support claims
+- **Improvement needed**: Specific examples with data, research findings, or concrete evidence
 
-### 4. **Critical Analysis**
-- **Current**: Good analysis but could be deeper
-- **Issue**: Some analysis is surface-level
-- **Improvement needed**: More critical evaluation of the relationship between individual and systemic actions
+### 4. **Surface-Level Analysis**
+- **Current**: Basic explanations without depth or critical thinking
+- **Issue**: "This shows that individual choices can influence what companies do" - no analysis of HOW or WHY
+- **Improvement needed**: Deeper analysis of mechanisms and relationships
 
-### 5. **Counter-argument Integration**
-- **Current**: Limited counter-argument consideration
-- **Issue**: Doesn't fully address opposing viewpoints
-- **Improvement needed**: More thorough consideration of alternative perspectives
+### 5. **Missing Counter-arguments**
+- **Current**: No consideration of opposing viewpoints
+- **Issue**: Doesn't address why some people believe individual actions are insignificant
+- **Improvement needed**: Acknowledge and respond to opposing arguments
 
-### 6. **Conclusion Development**
-- **Current**: Good conclusion but could be more impactful
-- **Issue**: Conclusion restates rather than synthesizes
-- **Improvement needed**: More synthesis and forward-looking perspective
+### 6. **Weak Conclusion**
+- **Current**: Simply restates the thesis without synthesis
+- **Issue**: No forward-looking perspective or deeper insights
+- **Improvement needed**: Synthesis of arguments and implications for the future
+
+### 7. **Surface-Level Issues**
+- **Grammar**: Some awkward phrasing and sentence structure
+- **Vocabulary**: Limited academic vocabulary and repetitive word choice
+- **Organization**: Basic structure but lacks sophisticated logical flow
+- **Register**: Too informal for academic writing
 
 ---
 
@@ -58,24 +64,24 @@ In conclusion, while individual actions may appear insignificant compared to lar
 This sample essay provides opportunities for students to practice all four learning goals:
 
 ### **Goal 1: Provide Contextual Information**
-- Students must explain the essay question and their revision goals
-- They need to identify which specific issues they want to address
-- They should articulate their learning objectives for the session
+- Students must explain the essay question and identify the specific writing issues
+- They need to articulate which problems they want to focus on (thesis, evidence, analysis, etc.)
+- They should provide context about their academic level and revision goals
 
 ### **Goal 2: Negotiate with AI on Agenda and Goals**
-- Students must prioritize which issues to focus on first
-- They need to consider time constraints and learning priorities
-- They should negotiate with AI about the most effective revision strategy
+- Students must prioritize which issues to address first (thesis vs. evidence vs. grammar)
+- They need to negotiate with AI about the most effective revision approach
+- They should consider whether to focus on content issues or surface-level problems first
 
 ### **Goal 3: Critically Review AI Responses**
-- Students should question AI suggestions about thesis improvement
-- They need to evaluate AI recommendations for evidence and examples
-- They should critically assess AI advice about structure and analysis
+- Students should question AI suggestions about thesis improvement and ask for explanations
+- They need to evaluate AI recommendations for evidence and examples critically
+- They should assess whether AI advice addresses the specific problems in their essay
 
 ### **Goal 4: Do Your Own Writing and Editing**
-- Students must implement all revisions themselves
-- They should make final decisions about which suggestions to accept
-- They need to maintain ownership of their writing process
+- Students must implement all revisions themselves, not just accept AI suggestions
+- They should make final decisions about which improvements to make
+- They need to maintain ownership of their writing process and final product
 
 ---
 
@@ -84,20 +90,20 @@ This sample essay provides opportunities for students to practice all four learn
 This essay can be evaluated using the provided rubrics across all dimensions:
 
 ### **Content and Ideas**
-- **Current Level**: 3 (Developing) - Ideas are relevant but basic
-- **Improvement Target**: 4 (Proficient) - More insightful and well-developed viewpoint
+- **Current Level**: 2 (Basic) - Ideas are somewhat related but vague, viewpoint unclear
+- **Improvement Target**: 4 (Proficient) - More insightful and well-developed viewpoint with clear position
 
 ### **Organisation and Logical Progression**
-- **Current Level**: 3 (Developing) - Clear structure but needs more logical flow
-- **Improvement Target**: 4 (Proficient) - Better organization with seamless progression
+- **Current Level**: 2 (Basic) - Basic structure with unclear paragraphing, ideas listed with little development
+- **Improvement Target**: 4 (Proficient) - Well-organized with clear paragraphs and logical flow
 
 ### **Vocabulary**
-- **Current Level**: 3 (Developing) - Adequate vocabulary with some variety
-- **Improvement Target**: 4 (Proficient) - More varied and precise vocabulary
+- **Current Level**: 2 (Basic) - Basic vocabulary with some repetition, minimal use of topic-specific terms
+- **Improvement Target**: 4 (Proficient) - Varied and precise vocabulary with effective use of academic terms
 
 ### **Grammar and Sentence Structure**
-- **Current Level**: 3 (Developing) - Mostly correct but lacks variety
-- **Improvement Target**: 4 (Proficient) - More varied and sophisticated sentence structures
+- **Current Level**: 2 (Basic) - Several grammatical errors, sentences simple and often flawed
+- **Improvement Target**: 4 (Proficient) - Minor errors with varied and mostly accurate sentence structures
 
 ---
 
